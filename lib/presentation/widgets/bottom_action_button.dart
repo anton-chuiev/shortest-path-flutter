@@ -11,12 +11,19 @@ class BottomActionButton extends StatelessWidget {
     super.key,
     required this.label,
     required this.onPressed,
+    this.isLoading = false,
   });
+
+  static const double _loaderSize = 20;
+  static const double _loaderStrokeWidth = 2;
 
   final String label;
 
   /// `null` disables the button.
   final VoidCallback? onPressed;
+
+  /// Disables the button and shows a progress indicator instead of [label].
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +31,20 @@ class BottomActionButton extends StatelessWidget {
       top: false,
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.medium),
-        child: ElevatedButton(onPressed: onPressed, child: Text(label)),
+        child: ElevatedButton(
+          onPressed: isLoading ? null : onPressed,
+          child: isLoading
+              ? Semantics(
+                  label: label,
+                  child: const SizedBox.square(
+                    dimension: _loaderSize,
+                    child: CircularProgressIndicator(
+                      strokeWidth: _loaderStrokeWidth,
+                    ),
+                  ),
+                )
+              : Text(label),
+        ),
       ),
     );
   }
