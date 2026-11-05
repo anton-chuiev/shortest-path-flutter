@@ -1,4 +1,4 @@
-package com.example.shortest_path
+package com.antonchuiev.shortestpath
 
 import io.flutter.embedding.android.FlutterActivity
 
