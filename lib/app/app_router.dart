@@ -1,6 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shortest_path/domain/entities/task.dart';
+import 'package:shortest_path/domain/repositories/tasks_repository.dart';
+import 'package:shortest_path/presentation/home/home_cubit.dart';
+import 'package:shortest_path/presentation/home/home_page.dart';
 import 'package:shortest_path/presentation/home/home_routes.dart';
 import 'package:shortest_path/presentation/preview/preview_page.dart';
 import 'package:shortest_path/presentation/process/process_page.dart';
@@ -8,7 +13,7 @@ import 'package:shortest_path/presentation/process/process_routes.dart';
 import 'package:shortest_path/presentation/results/results_page.dart';
 import 'package:shortest_path/presentation/results/results_routes.dart';
 
-/// Single place that knows how screens are connected.
+/// Single place that knows how screens are built and connected.
 ///
 /// Each page depends only on its own routes interface; this class
 /// implements all of them. It drives the app's [Navigator] through
@@ -16,8 +21,18 @@ import 'package:shortest_path/presentation/results/results_routes.dart';
 class AppRouter implements HomeRoutes, ProcessRoutes, ResultsRoutes {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+  /// The first screen, used as `MaterialApp.home`.
+  Widget buildHome() {
+    return BlocProvider(
+      create: (context) =>
+          HomeCubit(repository: context.read<TasksRepository>()),
+      child: HomePage(routes: this),
+    );
+  }
+
   @override
-  void toProcess() => _push(ProcessPage(routes: this));
+  void toProcess({required Uri url, required List<Task> tasks}) =>
+      _push(ProcessPage(routes: this, url: url, tasks: tasks));
 
   @override
   void toResults() => _push(ResultsPage(routes: this));
