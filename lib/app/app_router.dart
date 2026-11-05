@@ -56,7 +56,7 @@ class AppRouter implements HomeRoutes, ProcessRoutes, ResultsRoutes {
       _push(ResultsPage(routes: this, results: results));
 
   @override
-  void toPreview() => _push(const PreviewPage());
+  void toPreview(TaskResult result) => _push(PreviewPage(result: result));
 
   void _push(Widget page) {
     final navigator = navigatorKey.currentState;
