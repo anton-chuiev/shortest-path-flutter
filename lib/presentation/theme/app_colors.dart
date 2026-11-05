@@ -10,4 +10,7 @@ abstract final class AppColors {
   static const Color primaryButton = Color(0xFF40C4FF);
   static const Color primaryButtonBorder = Color(0xFF448AFF);
   static const Color onPrimaryButton = Colors.black;
+
+  static const Color progressIndicator = Color(0xFF2196F3);
+  static const Color divider = Color(0xFFEEEEEE);
 }
