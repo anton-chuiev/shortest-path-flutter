@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shortest_path/domain/entities/task.dart';
+import 'package:shortest_path/domain/entities/task_result.dart';
 import 'package:shortest_path/domain/repositories/tasks_repository.dart';
 import 'package:shortest_path/presentation/home/home_cubit.dart';
 import 'package:shortest_path/presentation/home/home_page.dart';
 import 'package:shortest_path/presentation/home/home_routes.dart';
 import 'package:shortest_path/presentation/preview/preview_page.dart';
+import 'package:shortest_path/presentation/process/process_cubit.dart';
 import 'package:shortest_path/presentation/process/process_page.dart';
 import 'package:shortest_path/presentation/process/process_routes.dart';
 import 'package:shortest_path/presentation/results/results_page.dart';
@@ -31,11 +33,27 @@ class AppRouter implements HomeRoutes, ProcessRoutes, ResultsRoutes {
   }
 
   @override
-  void toProcess({required Uri url, required List<Task> tasks}) =>
-      _push(ProcessPage(routes: this, url: url, tasks: tasks));
+  void toProcess({required Uri url, required List<Task> tasks}) {
+    _push(
+      BlocProvider(
+        create: (context) {
+          final cubit = ProcessCubit(
+            repository: context.read<TasksRepository>(),
+            url: url,
+            tasks: tasks,
+          );
+          // The calculation starts as soon as the screen is shown.
+          unawaited(cubit.calculate());
+          return cubit;
+        },
+        child: ProcessPage(routes: this),
+      ),
+    );
+  }
 
   @override
-  void toResults() => _push(ResultsPage(routes: this));
+  void toResults(List<TaskResult> results) =>
+      _push(ResultsPage(routes: this, results: results));
 
   @override
   void toPreview() => _push(const PreviewPage());
