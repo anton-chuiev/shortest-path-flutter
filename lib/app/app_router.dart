@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shortest_path/domain/entities/task.dart';
 import 'package:shortest_path/domain/entities/task_result.dart';
 import 'package:shortest_path/domain/repositories/tasks_repository.dart';
+import 'package:shortest_path/domain/repositories/url_repository.dart';
 import 'package:shortest_path/presentation/home/home_cubit.dart';
 import 'package:shortest_path/presentation/home/home_page.dart';
 import 'package:shortest_path/presentation/home/home_routes.dart';
@@ -23,12 +24,15 @@ import 'package:shortest_path/presentation/results/results_routes.dart';
 class AppRouter implements HomeRoutes, ProcessRoutes, ResultsRoutes {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  /// The first screen, used as `MaterialApp.home`.
-  Widget buildHome() {
+  /// The first screen, used as `MaterialApp.home`; [initialUrl] is the URL
+  /// saved on a previous launch.
+  Widget buildHome({Uri? initialUrl}) {
     return BlocProvider(
-      create: (context) =>
-          HomeCubit(repository: context.read<TasksRepository>()),
-      child: HomePage(routes: this),
+      create: (context) => HomeCubit(
+        tasksRepository: context.read<TasksRepository>(),
+        urlRepository: context.read<UrlRepository>(),
+      ),
+      child: HomePage(routes: this, initialUrl: initialUrl),
     );
   }
 
