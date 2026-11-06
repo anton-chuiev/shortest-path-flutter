@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shortest_path/app/app_router.dart';
 import 'package:shortest_path/domain/repositories/tasks_repository.dart';
 import 'package:shortest_path/domain/repositories/url_repository.dart';
-import 'package:shortest_path/presentation/theme/app_theme.dart';
+import 'package:shortest_path/presentation/common/theme/app_theme.dart';
 
 /// Root widget: provides the repositories to the whole tree and wires the
 /// theme and the router into [MaterialApp].

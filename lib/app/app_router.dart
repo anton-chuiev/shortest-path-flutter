@@ -6,15 +6,15 @@ import 'package:shortest_path/domain/entities/task.dart';
 import 'package:shortest_path/domain/entities/task_result.dart';
 import 'package:shortest_path/domain/repositories/tasks_repository.dart';
 import 'package:shortest_path/domain/repositories/url_repository.dart';
-import 'package:shortest_path/presentation/home/home_cubit.dart';
-import 'package:shortest_path/presentation/home/home_page.dart';
-import 'package:shortest_path/presentation/home/home_routes.dart';
-import 'package:shortest_path/presentation/preview/preview_page.dart';
-import 'package:shortest_path/presentation/process/process_cubit.dart';
-import 'package:shortest_path/presentation/process/process_page.dart';
-import 'package:shortest_path/presentation/process/process_routes.dart';
-import 'package:shortest_path/presentation/results/results_page.dart';
-import 'package:shortest_path/presentation/results/results_routes.dart';
+import 'package:shortest_path/presentation/screens/home/home_cubit.dart';
+import 'package:shortest_path/presentation/screens/home/home_page.dart';
+import 'package:shortest_path/presentation/screens/home/home_routes.dart';
+import 'package:shortest_path/presentation/screens/preview/preview_page.dart';
+import 'package:shortest_path/presentation/screens/process/process_cubit.dart';
+import 'package:shortest_path/presentation/screens/process/process_page.dart';
+import 'package:shortest_path/presentation/screens/process/process_routes.dart';
+import 'package:shortest_path/presentation/screens/results/results_page.dart';
+import 'package:shortest_path/presentation/screens/results/results_routes.dart';
 
 /// Single place that knows how screens are built and connected.
 ///

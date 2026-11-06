@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shortest_path/presentation/process/process_cubit.dart';
-import 'package:shortest_path/presentation/process/process_routes.dart';
-import 'package:shortest_path/presentation/process/process_state.dart';
-import 'package:shortest_path/presentation/theme/app_colors.dart';
-import 'package:shortest_path/presentation/theme/app_dimens.dart';
-import 'package:shortest_path/presentation/widgets/bottom_action_button.dart';
-import 'package:shortest_path/presentation/widgets/error_dialog.dart';
+import 'package:shortest_path/presentation/common/theme/app_colors.dart';
+import 'package:shortest_path/presentation/common/theme/app_dimens.dart';
+import 'package:shortest_path/presentation/common/widgets/bottom_action_button.dart';
+import 'package:shortest_path/presentation/common/widgets/error_dialog.dart';
+import 'package:shortest_path/presentation/screens/process/process_cubit.dart';
+import 'package:shortest_path/presentation/screens/process/process_routes.dart';
+import 'package:shortest_path/presentation/screens/process/process_state.dart';
 
 /// Screen 1.2: shows the calculation progress and sends the results.
 ///

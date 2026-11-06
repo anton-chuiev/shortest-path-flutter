@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shortest_path/presentation/theme/app_colors.dart';
-import 'package:shortest_path/presentation/theme/app_dimens.dart';
+import 'package:shortest_path/presentation/common/theme/app_colors.dart';
+import 'package:shortest_path/presentation/common/theme/app_dimens.dart';
 
 /// App-wide theme matching the mockups: blue app bar, light grey background,
 /// light blue rounded bottom button with a blue border (none when disabled).

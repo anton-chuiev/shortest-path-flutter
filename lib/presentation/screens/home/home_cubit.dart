@@ -2,9 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shortest_path/core/network/network_exception.dart';
 import 'package:shortest_path/domain/repositories/tasks_repository.dart';
 import 'package:shortest_path/domain/repositories/url_repository.dart';
-import 'package:shortest_path/presentation/errors/network_error_message.dart';
-import 'package:shortest_path/presentation/home/home_state.dart';
-import 'package:shortest_path/presentation/home/url_validator.dart';
+import 'package:shortest_path/presentation/common/errors/network_error_message.dart';
+import 'package:shortest_path/presentation/screens/home/home_state.dart';
+import 'package:shortest_path/presentation/screens/home/url_validator.dart';
 
 /// Logic of the Home screen: validates the URL, saves it and loads the tasks
 /// from it.
