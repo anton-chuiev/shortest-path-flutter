@@ -99,9 +99,14 @@ class ProcessPage extends StatelessWidget {
               ),
               // Hidden, but still taking its space while calculating: the
               // content above is centered in the remaining height and would
-              // jump up when the button appears.
-              Visibility.maintain(
+              // jump up when the button appears. Only the size is kept: the
+              // hidden button can't be tapped, focused or read by a screen
+              // reader (Visibility.maintain would keep all of that too).
+              Visibility(
                 visible: state is ProcessFinished,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
                 child: BottomActionButton(
                   label: 'Send results to server',
                   onPressed: () =>
@@ -140,9 +145,14 @@ class _StatusText extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        // Invisible: only sets the height of the Stack.
-        Visibility.maintain(
+        // Invisible: only sets the height of the Stack. Not read by a screen
+        // reader, which would otherwise announce the finished text while
+        // the calculation is still running.
+        Visibility(
           visible: false,
+          maintainSize: true,
+          maintainAnimation: true,
+          maintainState: true,
           child: Text(
             reserveSpaceFor,
             style: style,
