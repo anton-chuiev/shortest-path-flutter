@@ -28,6 +28,9 @@ class ProcessCubit extends Cubit<ProcessState> {
   }) : _tasks = List.unmodifiable(tasks),
        super(ProcessCalculating(done: 0, total: tasks.length));
 
+  static const String _calculationErrorMessage =
+      'Could not calculate the results';
+
   final TasksRepository _repository;
   final Uri _url;
   final List<Task> _tasks;
@@ -49,7 +52,30 @@ class ProcessCubit extends Cubit<ProcessState> {
 
     final results = <TaskResult>[];
     for (final task in _tasks) {
-      final result = await _solveInBackground(task, _pathFinder);
+      final TaskResult result;
+      try {
+        result = await _solveInBackground(task, _pathFinder);
+      } catch (error, stackTrace) {
+        // Only malformed task data can get here (e.g. a row shorter than
+        // the others). Everything is caught: such data fails with an Error
+        // (RangeError), not an Exception.
+        if (isClosed) {
+          return;
+        }
+        developer.log(
+          'Failed to solve task ${task.id}',
+          name: 'ProcessCubit',
+          error: error,
+          stackTrace: stackTrace,
+        );
+        emit(
+          ProcessCalculationError(
+            _calculationErrorMessage,
+            progress: results.length / _tasks.length,
+          ),
+        );
+        return;
+      }
       // The screen was closed while the task was being solved.
       if (isClosed) {
         return;
@@ -69,6 +95,8 @@ class ProcessCubit extends Cubit<ProcessState> {
       // The button is disabled in these states; this also covers a fast
       // double tap.
       ProcessCalculating() || ProcessSending() => null,
+      // Nothing to send.
+      ProcessCalculationError() => null,
       ProcessFinished(:final results) => results,
     };
     if (results == null) {

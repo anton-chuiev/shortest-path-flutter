@@ -28,7 +28,8 @@ class ProcessPage extends StatelessWidget {
   /// One-off reactions to state changes; the UI itself is built in `builder`.
   void _onStateChanged(BuildContext context, ProcessState state) {
     switch (state) {
-      case ProcessSendError(:final message):
+      case ProcessCalculationError(:final message) ||
+          ProcessSendError(:final message):
         unawaited(showErrorDialog(context, message: message));
       case ProcessSent(:final results):
         routes.toResults(results);
@@ -46,6 +47,10 @@ class ProcessPage extends StatelessWidget {
         builder: (context, state) {
           final (status, progress) = switch (state) {
             ProcessCalculating(:final progress) => ('Calculating...', progress),
+            ProcessCalculationError(:final message, :final progress) => (
+              message,
+              progress,
+            ),
             ProcessFinished() => (_finishedText, 1.0),
           };
           final textTheme = Theme.of(context).textTheme;

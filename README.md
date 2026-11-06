@@ -57,7 +57,8 @@ manually on iOS and Android.
 ## Decisions and assumptions
 
 - **Task data is not validated.** The assignment guarantees a square grid of
-  2–99 cells with only `.` and `X`, and `start` / `end` inside it.
+  2–99 cells with only `.` and `X`, and `start` / `end` inside it. If malformed
+  data still breaks the calculation, the Process screen shows an error.
 - **No path** (end unreachable, or `start` / `end` on `X`): sent as
   `"steps": []`, `"path": ""`; the UI shows `No path found`.
 - **Path format** in the UI is the API format, `(x,y)->(x,y)`.
