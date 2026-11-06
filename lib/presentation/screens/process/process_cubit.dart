@@ -15,8 +15,9 @@ import 'package:shortest_path/presentation/screens/process/process_state.dart';
 /// Logic of the Process screen: solves the tasks, reporting progress, and
 /// sends the results to the URL the tasks came from.
 ///
-/// Closing the cubit (leaving the screen) stops the calculation and cancels
-/// a request in flight.
+/// Closing the cubit (leaving the screen) cancels a request in flight and
+/// skips the tasks not solved yet; a task already running on its isolate
+/// still finishes (milliseconds even for 99×99), its result is dropped.
 class ProcessCubit extends Cubit<ProcessState> {
   /// Callers pass `repository:`, `url:` and `pathFinder:` — for a private
   /// named parameter Dart drops the underscore from the argument name.
@@ -27,6 +28,9 @@ class ProcessCubit extends Cubit<ProcessState> {
     this._pathFinder = const PathFinder(),
   }) : _tasks = List.unmodifiable(tasks),
        super(ProcessCalculating(done: 0, total: tasks.length));
+
+  static const String _calculationErrorMessage =
+      'Could not calculate the results';
 
   final TasksRepository _repository;
   final Uri _url;
@@ -49,7 +53,30 @@ class ProcessCubit extends Cubit<ProcessState> {
 
     final results = <TaskResult>[];
     for (final task in _tasks) {
-      final result = await _solveInBackground(task, _pathFinder);
+      final TaskResult result;
+      try {
+        result = await _solveInBackground(task, _pathFinder);
+      } catch (error, stackTrace) {
+        // Only malformed task data can get here (e.g. a row shorter than
+        // the others). Everything is caught: such data fails with an Error
+        // (RangeError), not an Exception.
+        if (isClosed) {
+          return;
+        }
+        developer.log(
+          'Failed to solve task ${task.id}',
+          name: 'ProcessCubit',
+          error: error,
+          stackTrace: stackTrace,
+        );
+        emit(
+          ProcessCalculationError(
+            _calculationErrorMessage,
+            progress: results.length / _tasks.length,
+          ),
+        );
+        return;
+      }
       // The screen was closed while the task was being solved.
       if (isClosed) {
         return;
@@ -69,6 +96,8 @@ class ProcessCubit extends Cubit<ProcessState> {
       // The button is disabled in these states; this also covers a fast
       // double tap.
       ProcessCalculating() || ProcessSending() => null,
+      // Nothing to send.
+      ProcessCalculationError() => null,
       ProcessFinished(:final results) => results,
     };
     if (results == null) {
@@ -84,6 +113,12 @@ class ProcessCubit extends Cubit<ProcessState> {
         results,
         cancellationToken: cancellationToken,
       );
+      // The screen was closed while the results were being sent. With
+      // ApiClient a cancelled request never returns, but the cubit doesn't
+      // rely on that: emitting after close throws.
+      if (isClosed) {
+        return;
+      }
       // Not shown in the UI (not in the task), but handy for checking the
       // algorithm: visible in the debug console and DevTools.
       final correctCount = checks.where((check) => check.correct).length;
@@ -93,7 +128,10 @@ class ProcessCubit extends Cubit<ProcessState> {
       );
       emit(ProcessSent(results));
     } on NetworkException catch (exception) {
-      // `null` for a cancelled request: the cubit is closed, nothing to show.
+      if (isClosed) {
+        return;
+      }
+      // `null` only for a cancelled request, which happens only on close.
       final message = networkErrorMessage(exception);
       if (message != null) {
         emit(ProcessSendError(results, message: message));

@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The app loads tasks from and sends results to the API. Debug and
+         profile builds get this permission from their own manifests; without
+         it here, a release build cannot reach the network. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <!-- allowBackup: off, so a reinstalled app starts without the API URL
          saved before (Auto Backup would restore it). The app stores nothing
          else. -->

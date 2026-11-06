@@ -22,6 +22,23 @@ final class ProcessCalculating extends ProcessState {
   List<Object?> get props => [done, total];
 }
 
+/// A task could not be solved, so there are no results to send; [message]
+/// is shown in an error dialog and the user can only go back.
+///
+/// Happens only with malformed task data, which the task description rules
+/// out; the screen still must not hang in [ProcessCalculating].
+final class ProcessCalculationError extends ProcessState {
+  const ProcessCalculationError(this.message, {required this.progress});
+
+  final String message;
+
+  /// Share of the tasks solved before the failure, from 0 to 1.
+  final double progress;
+
+  @override
+  List<Object?> get props => [message, progress];
+}
+
 /// Every task is solved; the results can be sent to the server.
 ///
 /// The subclasses tell what happens with the [results] next.

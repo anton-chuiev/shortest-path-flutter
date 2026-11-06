@@ -28,7 +28,8 @@ class ProcessPage extends StatelessWidget {
   /// One-off reactions to state changes; the UI itself is built in `builder`.
   void _onStateChanged(BuildContext context, ProcessState state) {
     switch (state) {
-      case ProcessSendError(:final message):
+      case ProcessCalculationError(:final message) ||
+          ProcessSendError(:final message):
         unawaited(showErrorDialog(context, message: message));
       case ProcessSent(:final results):
         routes.toResults(results);
@@ -46,6 +47,10 @@ class ProcessPage extends StatelessWidget {
         builder: (context, state) {
           final (status, progress) = switch (state) {
             ProcessCalculating(:final progress) => ('Calculating...', progress),
+            ProcessCalculationError(:final message, :final progress) => (
+              message,
+              progress,
+            ),
             ProcessFinished() => (_finishedText, 1.0),
           };
           final textTheme = Theme.of(context).textTheme;
@@ -99,9 +104,14 @@ class ProcessPage extends StatelessWidget {
               ),
               // Hidden, but still taking its space while calculating: the
               // content above is centered in the remaining height and would
-              // jump up when the button appears.
-              Visibility.maintain(
+              // jump up when the button appears. Only the size is kept: the
+              // hidden button can't be tapped, focused or read by a screen
+              // reader (Visibility.maintain would keep all of that too).
+              Visibility(
                 visible: state is ProcessFinished,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
                 child: BottomActionButton(
                   label: 'Send results to server',
                   onPressed: () =>
@@ -140,9 +150,14 @@ class _StatusText extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        // Invisible: only sets the height of the Stack.
-        Visibility.maintain(
+        // Invisible: only sets the height of the Stack. Not read by a screen
+        // reader, which would otherwise announce the finished text while
+        // the calculation is still running.
+        Visibility(
           visible: false,
+          maintainSize: true,
+          maintainAnimation: true,
+          maintainState: true,
           child: Text(
             reserveSpaceFor,
             style: style,
