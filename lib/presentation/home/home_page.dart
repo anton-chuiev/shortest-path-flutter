@@ -13,9 +13,12 @@ import 'package:shortest_path/presentation/widgets/error_dialog.dart';
 ///
 /// Expects a [HomeCubit] above it in the tree.
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.routes});
+  const HomePage({super.key, required this.routes, this.initialUrl});
 
   final HomeRoutes routes;
+
+  /// The URL saved on a previous launch, shown in the field at start.
+  final Uri? initialUrl;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,7 +27,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // Lives as long as the page, so the last URL is still there when the user
   // comes back from the Process screen.
-  final _urlController = TextEditingController();
+  late final TextEditingController _urlController;
+
+  @override
+  void initState() {
+    super.initState();
+    _urlController = TextEditingController(text: widget.initialUrl?.toString());
+  }
 
   @override
   void dispose() {
