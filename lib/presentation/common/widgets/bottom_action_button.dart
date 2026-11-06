@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shortest_path/presentation/theme/app_dimens.dart';
+import 'package:shortest_path/presentation/common/theme/app_dimens.dart';
 
 /// Full-width primary button pinned to the bottom of a screen.
 ///

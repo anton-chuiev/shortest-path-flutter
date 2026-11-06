@@ -9,8 +9,8 @@ import 'package:shortest_path/domain/entities/task.dart';
 import 'package:shortest_path/domain/entities/task_result.dart';
 import 'package:shortest_path/domain/pathfinding/path_finder.dart';
 import 'package:shortest_path/domain/repositories/tasks_repository.dart';
-import 'package:shortest_path/presentation/errors/network_error_message.dart';
-import 'package:shortest_path/presentation/process/process_state.dart';
+import 'package:shortest_path/presentation/common/errors/network_error_message.dart';
+import 'package:shortest_path/presentation/screens/process/process_state.dart';
 
 /// Logic of the Process screen: solves the tasks, reporting progress, and
 /// sends the results to the URL the tasks came from.

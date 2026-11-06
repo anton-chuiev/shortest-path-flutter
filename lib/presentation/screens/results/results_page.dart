@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shortest_path/domain/entities/task_result.dart';
-import 'package:shortest_path/presentation/formatting/result_path_text.dart';
-import 'package:shortest_path/presentation/results/results_routes.dart';
-import 'package:shortest_path/presentation/theme/app_colors.dart';
+import 'package:shortest_path/presentation/common/formatting/result_path_text.dart';
+import 'package:shortest_path/presentation/common/theme/app_colors.dart';
+import 'package:shortest_path/presentation/screens/results/results_routes.dart';
 
 /// Screen 1.3: the shortest path of every task, one row per task.
 ///

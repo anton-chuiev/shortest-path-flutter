@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:shortest_path/domain/entities/task_result.dart';
-import 'package:shortest_path/presentation/formatting/result_path_text.dart';
-import 'package:shortest_path/presentation/preview/result_grid.dart';
-import 'package:shortest_path/presentation/theme/app_dimens.dart';
+import 'package:shortest_path/presentation/common/formatting/result_path_text.dart';
+import 'package:shortest_path/presentation/common/theme/app_dimens.dart';
+import 'package:shortest_path/presentation/screens/preview/result_grid.dart';
 
 /// Screen 1.4: the grid of one task with its shortest path, and the path
 /// as text below it.
